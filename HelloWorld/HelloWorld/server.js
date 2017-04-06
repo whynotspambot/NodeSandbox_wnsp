@@ -1,6 +1,5 @@
-// Lesson 5
-var fs = require('fs')
-var path = require('path')
+// Lesson 6
+var df = require('./directoryFilter')
 
 if (process.argv.length != 4){
     console.log("Error.")
@@ -9,13 +8,9 @@ if (process.argv.length != 4){
 
 var directory = process.argv[2]
 var fileExtensionFilter = '.' + process.argv[3]
-fs.readdir(directory, function callback(err, files) {
+df(process.argv[2], process.argv[3], function (err, files) {
     if (err) {
         return console.log(err)
     }
-    for (var i = 0; i < files.length; i++) {
-        if (path.extname(files[i]) == fileExtensionFilter) {
-            console.log(files[i])
-        }
-    }
+    files.forEach(function (file) { console.log(file) })
 })

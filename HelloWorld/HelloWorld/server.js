@@ -1,20 +1,21 @@
-// Lesson 4
+// Lesson 5
 var fs = require('fs')
+var path = require('path')
 
-if (process.argv.length != 3)
-{
+if (process.argv.length != 4){
     console.log("Error.")
     process.exit(1)
 }
 
-function callback(err, contents) {
+var directory = process.argv[2]
+var fileExtensionFilter = '.' + process.argv[3]
+fs.readdir(directory, function callback(err, files) {
     if (err) {
-        console.log(err)
-        process.exit(1)
+        return console.log(err)
     }
-
-    console.log(contents.split('\n').length - 1)
-}
-
-var path = process.argv[2]
-var contents = fs.readFile(path, 'utf8', callback)
+    for (var i = 0; i < files.length; i++) {
+        if (path.extname(files[i]) == fileExtensionFilter) {
+            console.log(files[i])
+        }
+    }
+})

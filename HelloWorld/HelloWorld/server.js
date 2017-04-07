@@ -1,21 +1,36 @@
-// Lesson 12
+// Lesson 13
 var http = require('http')
-var map = require('through2-map')
+var url = require('url')
 
 var portNumber = process.argv[2]
 var filename = process.argv[3]
 
 function listener(request, response) {
     // new connection received
-    if (request.method == "POST")
+    if (request.method == "GET")
     {
-        // stream the content back as uppercase
-        //request.pipe(map(function (chunk) {
-        //        return chunk.toString().toUpperCase()
-        //}))
-        request.pipe(map(function (chunk) {
-            return chunk.toString().toUpperCase()
-        })).pipe(response)
+        // parse url
+        var urlstruct = url.parse(request.url, true)
+        if (urlstruct.pathname == '/api/parsetime') {
+            response.writeHead(200, { 'Content-Type': 'application/json' })
+            var date = new Date(urlstruct.query.iso)
+            var data = {}
+            data.hour = date.getHours()
+            data.minute = date.getMinutes()
+            data.second = date.getSeconds()
+            response.end(JSON.stringify(data))
+        }
+        else if (urlstruct.pathname == '/api/unixtime')
+        {
+            response.writeHead(200, { 'Content-Type': 'application/json' })
+            var date = new Date(urlstruct.query.iso)
+            var data = {}
+            data.unixtime = Math.floor(date.getTime())
+            response.end(JSON.stringify(data))
+        }
+        else {
+            response.end('Unknown route')
+        }
     }
 }
 

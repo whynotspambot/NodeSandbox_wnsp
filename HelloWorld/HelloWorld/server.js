@@ -1,15 +1,22 @@
-// Lesson 11
+// Lesson 12
 var http = require('http')
-var fs = require('fs')
+var map = require('through2-map')
 
 var portNumber = process.argv[2]
 var filename = process.argv[3]
 
 function listener(request, response) {
     // new connection received
-    // stream the file as the response
-    response.writeHead(200, {'content-type': 'text/plain'})
-    fs.createReadStream(filename).pipe(response)
+    if (request.method == "POST")
+    {
+        // stream the content back as uppercase
+        //request.pipe(map(function (chunk) {
+        //        return chunk.toString().toUpperCase()
+        //}))
+        request.pipe(map(function (chunk) {
+            return chunk.toString().toUpperCase()
+        })).pipe(response)
+    }
 }
 
 var server = http.createServer(listener)

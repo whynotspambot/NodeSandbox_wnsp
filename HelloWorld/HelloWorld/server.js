@@ -1,17 +1,16 @@
-// Lesson 10
-var net = require('net')
-var strftime = require('strftime')
+// Lesson 11
+var http = require('http')
+var fs = require('fs')
 
 var portNumber = process.argv[2]
+var filename = process.argv[3]
 
-function listener(socket) {
+function listener(request, response) {
     // new connection received
-    // send the time
-    var timeString = strftime("%Y-%m-%d %H:%M\n", new Date())
-    socket.end(timeString)
+    // stream the file as the response
+    response.writeHead(200, {'content-type': 'text/plain'})
+    fs.createReadStream(filename).pipe(response)
 }
 
-var server = net.createServer(listener)
+var server = http.createServer(listener)
 server.listen(portNumber)
-
-//console.log(strftime("%Y-%m-%d %H:%M", new Date()))

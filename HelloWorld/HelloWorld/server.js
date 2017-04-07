@@ -1,15 +1,24 @@
-// Lesson 8
+// Lesson 9
 var http = require('http')
 var bl = require('bl')
 
-var url = process.argv[2]
-var charCount = 0
-var completeData = ''
-http.get(url, function (response) {
-    response.pipe(bl(function (err, data) {
-        if (err) return console.error(err)
-        var completeData = data.toString()
-        console.log(completeData.length)
-        console.log(completeData)
-    }))
-}).on("error", console.error)
+var urls = process.argv.slice(2)
+var count = 0
+var results = []
+function processUrl(url, index) {
+    http.get(url, function (response) {
+        response.pipe(bl(function (err, data) {
+            if (err) return console.error(err)
+            results[index] = data.toString()
+            count++
+            if (count == 3) {
+                for (var i = 0; i < 3; i++)
+                    console.log(results[i])
+            }
+        }))
+    }).on("error", console.error)
+}
+
+for (var i = 0; i < urls.length; i++) {
+    processUrl(urls[i], i)
+}

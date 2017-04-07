@@ -1,4 +1,4 @@
-// Lesson 6
+// Lesson 7
 var df = require('./directoryFilter')
 
 if (process.argv.length != 4){

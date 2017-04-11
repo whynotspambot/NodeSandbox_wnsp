@@ -1,0 +1,9 @@
+{
+  "name": "sample-blog",
+  "version": "0.0.0",
+  "description": "SampleBlog",
+  "main": "server.js",
+  "author": {
+    "name": "mquee"
+  }
+}
